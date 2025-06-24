@@ -151,7 +151,10 @@ export const getWeeklyStats = async (uid: string) => {
   );
   
   const querySnapshot = await getDocs(q);
-  const weeklyProgress = querySnapshot.docs.map(doc => doc.data()) as Progress[];
+  const weeklyProgress = querySnapshot.docs.map(doc => ({
+    ...doc.data(),
+    completedAt: doc.data().completedAt?.toDate() || new Date()
+  })) as Progress[];
   
   return {
     topicsCompleted: weeklyProgress.length,
